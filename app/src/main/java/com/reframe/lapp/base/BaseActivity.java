@@ -56,6 +56,7 @@ import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder;
 import cafe.adriel.androidaudiorecorder.model.AudioChannel;
 import cafe.adriel.androidaudiorecorder.model.AudioSampleRate;
 import cafe.adriel.androidaudiorecorder.model.AudioSource;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import gun0912.tedbottompicker.TedBottomPicker;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -389,7 +390,9 @@ public abstract class BaseActivity extends MvvmActivity {
                         .startIntent(intent)
                         .doOnNext(activityResult -> {
                             Intent result = activityResult.data();
-                            Log.d(TAG, "RESULT ITEM>".concat(result.getData().toString()));
+                            if(result != null && result.getData() != null) {
+                                Log.d(TAG, "RESULT ITEM>".concat(result.getData().toString()));
+                            }
                         });
             }
 
@@ -447,6 +450,14 @@ public abstract class BaseActivity extends MvvmActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if(JCVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
     }
@@ -454,6 +465,7 @@ public abstract class BaseActivity extends MvvmActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        JCVideoPlayer.releaseAllVideos();
     }
 
     @Override

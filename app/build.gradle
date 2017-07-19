@@ -100,7 +100,7 @@ dependencies {
     compile 'com.ramotion.foldingcell:folding-cell:1.1.0'
 
     //Video player library
-    compile 'com.github.halilozercan:BetterVideoPlayer:1.1.0'
+    compile 'fm.jiecao:jiecaovideoplayer:5.7'
 
     //Image picker library
     compile 'gun0912.ted:tedbottompicker:1.0.12'

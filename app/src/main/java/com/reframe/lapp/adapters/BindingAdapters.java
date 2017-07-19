@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.BindingConversion;
-import android.databinding.InverseBindingAdapter;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -41,7 +40,6 @@ import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.view.LineChartView;
 import com.eugeneek.smilebar.SmileBar;
 import com.github.florent37.viewanimator.ViewAnimator;
-import com.halilibo.bettervideoplayer.BetterVideoPlayer;
 import com.manaschaudhari.android_mvvm.ViewModel;
 import com.manaschaudhari.android_mvvm.adapters.ViewModelBinder;
 import com.manaschaudhari.android_mvvm.adapters.ViewProvider;
@@ -70,6 +68,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import rx.Observable;
 import rx.functions.Action0;
 
@@ -173,12 +173,9 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("videoUrl")
-    public static void setVideoUrl(BetterVideoPlayer player, String url) {
+    public static void setVideoUrl(JCVideoPlayerStandard player, String url) {
         if(url != null) {
-            player.setAutoPlay(false);
-            player.setSource(Uri.parse(url));
-			player.enableSwipeGestures();
-	        player.enableControls();
+            player.setUp(url, JCVideoPlayer.SCREEN_LAYOUT_NORMAL);
         }
     }
 
@@ -382,7 +379,7 @@ public class BindingAdapters {
                 playerView.setLayoutParams(params);
                 ImageView playControl = (ImageView) playerView.findViewById(R.id.feedbackPlayerControl);
                 SeekBar seekBar = (SeekBar) playerView.findViewById(R.id.seekBar);
-                BetterVideoPlayer player = (BetterVideoPlayer) playerView.findViewById(R.id.player);
+                JCVideoPlayerStandard player = (JCVideoPlayerStandard) playerView.findViewById(R.id.player);
                 seekBar.setProgress(0);
                 seekBar.setMax(100);
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -462,8 +459,7 @@ public class BindingAdapters {
                     }
                 } );
                 if(feedback.getVideo().getUrl() != null) {
-                    player.setAutoPlay(false);
-                    player.setSource(Uri.parse(feedback.getVideo().getUrl()));
+                    player.setUp(feedback.getVideo().getUrl(), JCVideoPlayer.SCREEN_LAYOUT_NORMAL);
                 } else {
                     player.setVisibility(View.GONE);
                 }
@@ -485,7 +481,7 @@ public class BindingAdapters {
                 playerView.setLayoutParams(params);
                 ImageView playControl = (ImageView) playerView.findViewById(R.id.feedbackPlayerControl);
                 SeekBar seekBar = (SeekBar) playerView.findViewById(R.id.seekBar);
-                BetterVideoPlayer player = (BetterVideoPlayer) playerView.findViewById(R.id.player);
+                JCVideoPlayerStandard player = (JCVideoPlayerStandard) playerView.findViewById(R.id.player);
                 seekBar.setProgress(0);
                 seekBar.setMax(100);
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -565,8 +561,7 @@ public class BindingAdapters {
                     }
                 } );
                 if(feedback.getVideoUrl() != null) {
-                    player.setAutoPlay(false);
-                    player.setSource(Uri.parse(feedback.getVideoUrl()));
+                    player.setUp(feedback.getVideoUrl(), JCVideoPlayer.SCREEN_LAYOUT_NORMAL);
                 } else {
                     player.setVisibility(View.GONE);
                 }

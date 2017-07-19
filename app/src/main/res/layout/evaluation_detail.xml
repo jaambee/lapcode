@@ -41,7 +41,7 @@
             app:layout_constraintRight_toRightOf="@+id/toolbar"
             app:layout_constraintTop_toTopOf="@+id/toolbar"
             app:srcCompat="@drawable/ic_logo" />
-        <com.halilibo.bettervideoplayer.BetterVideoPlayer
+        <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
             android:id="@+id/player"
             android:layout_width="0dp"
             android:layout_height="200dp"
