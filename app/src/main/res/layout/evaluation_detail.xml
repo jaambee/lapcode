@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="vm"
+            type="com.reframe.lapp.viewmodels.evaluations.EvaluationDetailModel" />
+        <import type="com.reframe.lapp.utils.ViewProviders" />
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Base.Widget.AppCompat.Toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintLeft_toLeftOf="@+id/toolbar"
+            app:layout_constraintRight_toRightOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:srcCompat="@drawable/ic_logo" />
+        <com.halilibo.bettervideoplayer.BetterVideoPlayer
+            android:id="@+id/player"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:videoUrl="@{vm.video}"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+
+        <TextView
+            android:id="@+id/exerciseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{vm.exerciseName}"
+            android:textAlignment="viewStart"
+            android:gravity="start"
+            android:textColor="@color/colorGray"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player" />
+
+        <ImageView
+            android:id="@+id/userIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/exerciseName"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseName"
+            app:srcCompat="@drawable/ic_person_black_24dp"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@{vm.professor}"
+            android:textAlignment="viewStart"
+            android:gravity="start"
+            android:textColor="@color/colorGray"
+            app:layout_constraintBottom_toBottomOf="@+id/userIcon"
+            app:layout_constraintLeft_toRightOf="@+id/userIcon"
+            app:layout_constraintTop_toTopOf="@+id/userIcon"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/nivelLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="NIVEL"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/userIcon"
+            app:layout_constraintTop_toBottomOf="@+id/userIcon" />
+
+        <TextView
+            android:id="@+id/levelValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@{vm.level}"
+            android:textAlignment="viewEnd"
+            android:gravity="end"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/nivelLabel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nivelLabel"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nivelLabel"
+            android:id="@+id/sep1"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/exerciseGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="GRUPO DE EJERCICIO"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/userIcon"
+            app:layout_constraintTop_toBottomOf="@+id/sep1" />
+
+        <TextView
+            android:id="@+id/exerciseGroupValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@{vm.exerciseGroup}"
+            android:textAlignment="viewEnd"
+            android:gravity="end"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/exerciseGroup"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/exerciseGroup" />
+
+        <View
+            android:id="@+id/sep2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseGroup"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/idealTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="TIEMPO IDEAL"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/exerciseGroup"
+            app:layout_constraintTop_toBottomOf="@+id/sep2" />
+
+        <TextView
+            android:id="@+id/idealTimeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="600 SEG"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/idealTimeLabel"
+            app:layout_constraintLeft_toRightOf="@+id/idealTimeLabel"
+            app:layout_constraintTop_toTopOf="@+id/idealTimeLabel"
+            android:layout_marginStart="16dp" />
+
+        <View
+            android:id="@+id/sep3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idealTimeLabel"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:text="TIEMPO ALUMNO"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/sep2"
+            app:layout_constraintRight_toLeftOf="@+id/textView12"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/currentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="600 SEG"
+            android:textAlignment="viewEnd"
+            android:gravity="end"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView11"
+            app:layout_constraintRight_toRightOf="@+id/sep3"
+            app:layout_constraintTop_toTopOf="@+id/textView11"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <LinearLayout
+            android:id="@+id/scalesContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:addScales="@{vm.evaluation}"
+            app:navigator="@{vm.navigator}"
+            app:layout_constraintTop_toBottomOf="@+id/sep3"/>
+        <LinearLayout
+            android:id="@+id/feedbackContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:addFeedback="@{vm.evaluation}"
+            app:navigator="@{vm.navigator}"
+            app:layout_constraintTop_toBottomOf="@+id/scalesContainer">
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/evaluation_professor"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feedbackContainer">
+
+            <com.eugeneek.smilebar.SmileBar
+                android:id="@+id/feedbackProfessor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                app:enabled="true"
+                app:horizontalSpacing="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:rating="1"
+                app:smileDefault="@drawable/ic_star_disabled"
+                app:smileHeight="30dp"
+                app:smileRate1="@drawable/ic_star"
+                app:smileRate2="@drawable/ic_star"
+                app:smileRate3="@drawable/ic_star"
+                app:smileRate4="@drawable/ic_star"
+                app:smileRate5="@drawable/ic_star"
+                app:smileWidth="30dp" />
+
+            <TextView
+                android:id="@+id/feedbackProfessorLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Evalúa al profesor"
+                android:textAlignment="viewStart"
+                android:gravity="start"
+                android:textColor="@color/colorGray"
+                app:layout_constraintBottom_toBottomOf="@+id/feedbackProfessor"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/feedbackProfessor"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+        </android.support.constraint.ConstraintLayout>
+
+        <Button
+            android:id="@+id/sendEvaluationFeedback"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="ENVIAR"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/evaluation_professor" />
+    </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</layout>

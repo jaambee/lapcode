@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="vm"
+            type="com.reframe.lapp.viewmodels.ProfileViewModel" />
+
+        <import type="com.reframe.lapp.utils.ViewProviders" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/nameEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:ems="10"
+            android:hint="Nombre"
+            android:inputType="textPersonName"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="@={vm.name}"
+            android:textColor="@color/colorGray"
+            android:textSize="18sp"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/birthEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/ic_event_black_24dp"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:ems="10"
+            android:hint="Edad"
+            android:inputType="textPersonName"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="@={vm.birth}"
+            android:textColor="@color/colorGray"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
+
+        <TextView
+            android:id="@+id/countryEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:ems="10"
+            android:hint="País"
+            android:inputType="textPersonName"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="@={vm.country}"
+            android:textColor="@color/colorGray"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/birthEdit" />
+
+        <TextView
+            android:id="@+id/cityEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/ic_location_city_black_24dp"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:ems="10"
+            android:hint="Institución"
+            android:inputType="textPersonName"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="@={vm.institution}"
+            android:textColor="@color/colorGray"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/countryEdit" />
+
+        <TextView
+            android:id="@+id/specialtyEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/ic_beenhere_black_24dp"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:ems="10"
+            android:hint="Especialidad"
+            android:inputType="textPersonName"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="@={vm.specialty}"
+            android:textColor="@color/colorGray"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cityEdit" />
+
+        <TextView
+            android:id="@+id/levelEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/ic_show_chart_black_24dp"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:ems="10"
+            android:hint="Nivel"
+            android:inputType="textPersonName"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/colorGray"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/specialtyEdit" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

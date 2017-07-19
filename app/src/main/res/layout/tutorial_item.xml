@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:folding-cell="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.reframe.lapp.viewmodels.tutorials.TutorialItemViewModel" />
+
+        <import type="com.reframe.lapp.utils.ViewProviders" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="6dp">
+
+        <com.ramotion.foldingcell.FoldingCell
+            android:id="@+id/folding_cell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:foldingCell="@{vm.isOpen}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            folding-cell:animationDuration="1500"
+            folding-cell:backSideColor="@color/colorBackSide"
+            folding-cell:cameraHeight="30"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1">
+            ​
+
+            <LinearLayout
+                android:id="@+id/cell_content_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:addExercises="@{vm.exercises}"
+                app:navigator="@{vm.navigator}">
+
+                <TextView
+                    android:id="@+id/titleGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorPrimary"
+                    android:onClick="@{vm.closeCell}"
+                    android:paddingTop="24dp"
+                    android:text="@{vm.name}"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            ​
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cell_title_view"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:onClick="@{vm.openCell}">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:background="@{vm.isUnlocked?@color/colorPrimaryDark:@color/colorPrimaryDarkLight}"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="16dp"
+                    android:text="@{vm.name}"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="@+id/textView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@{vm.isUnlocked?@drawable/ic_keyboard_arrow_down_black_24dp:@drawable/ic_lock_black_24dp}" />
+
+            </android.support.constraint.ConstraintLayout>
+            ​
+        </com.ramotion.foldingcell.FoldingCell>
+    </android.support.constraint.ConstraintLayout>
+</layout>

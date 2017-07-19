@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_tutorials"
+        android:enabled="true"
+        android:icon="@drawable/ic_book_black_24dp"
+        android:title="@string/text_tutorials"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_evaluations"
+        android:enabled="true"
+        android:icon="@drawable/ic_rate_review_black_24dp"
+        android:title="@string/text_evaluations"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_evolution"
+        android:enabled="true"
+        android:icon="@drawable/ic_evolution_black_24dp"
+        android:title="@string/text_evolution"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="@string/text_profile"
+        app:showAsAction="ifRoom" />
+</menu>

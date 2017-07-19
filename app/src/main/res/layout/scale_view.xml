@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content">
+
+    <com.eugeneek.smilebar.SmileBar
+        android:id="@+id/scaleValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        app:enabled="true"
+        app:horizontalSpacing="4dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:rating="1"
+        app:smileDefault="@drawable/scale_empty"
+        app:smileHeight="30dp"
+        app:smileRate1="@drawable/scale_rect"
+        app:smileRate2="@drawable/scale_rect"
+        app:smileRate3="@drawable/scale_rect"
+        app:smileRate4="@drawable/scale_rect"
+        app:smileRate5="@drawable/scale_rect"
+        app:smileWidth="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/scaleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorGray"
+        app:layout_constraintBottom_toBottomOf="@+id/scaleValue"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/scaleValue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.538" />
+</android.support.constraint.ConstraintLayout>

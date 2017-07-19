@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="vm"
+            type="com.reframe.lapp.viewmodels.evaluations.EvaluationItemViewModel" />
+
+        <import type="com.reframe.lapp.utils.ViewProviders" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="0dp"
+            android:layout_height="1dip"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorGray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoThumb"
+            bind:layout_constraintLeft_toLeftOf="parent"
+            bind:layout_constraintRight_toRightOf="parent" />
+
+        <ImageView
+            android:id="@+id/videoThumb"
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:imageUrl="@{vm.thumb}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/colorPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/playButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:onClick="@{vm.openDetails}"
+            app:layout_constraintLeft_toLeftOf="@+id/videoThumb"
+            app:layout_constraintRight_toRightOf="@+id/videoThumb"
+            app:layout_constraintTop_toTopOf="@+id/videoThumb"
+            app:srcCompat="@drawable/ic_lapp_play"
+            app:layout_constraintBottom_toBottomOf="@+id/videoThumb"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="0dp"
+            android:gravity="start"
+            android:lines="2"
+            android:text="@{vm.name}"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/date"
+            app:layout_constraintRight_toLeftOf="@+id/status"
+            app:layout_constraintTop_toBottomOf="@+id/date" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@{vm.date}"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/videoThumb"
+            app:layout_constraintLeft_toRightOf="@+id/playButton"
+            android:layout_marginLeft="8dp" />
+
+        <ImageView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@{vm.approved? @drawable/ic_lapp_check: @drawable/ic_lapp_nocheck}"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/videoThumb"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/videoThumb"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="16dp" />
+
+        <TextView
+            android:id="@+id/level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:text="@{vm.level}"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

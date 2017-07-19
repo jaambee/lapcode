@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content">
+
+    <com.halilibo.bettervideoplayer.BetterVideoPlayer
+        android:id="@+id/player"
+        android:layout_width="0dp"
+        android:layout_height="203dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+    <ImageView
+        android:id="@+id/feedbackPlayerControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_lapp_play"
+        app:layout_constraintTop_toBottomOf="@+id/player"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="0dp"
+        android:progressBackgroundTint="@color/colorGray"
+        android:progressTint="@color/colorPrimary"
+        android:scrollbarTrackHorizontal="@color/colorGray"
+        android:secondaryProgressTint="@color/colorGray"
+        android:thumbTint="@color/colorPrimaryDark"
+        android:tickMarkTint="@color/colorGray"
+        app:layout_constraintBottom_toBottomOf="@+id/feedbackPlayerControl"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/feedbackPlayerControl"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/feedbackPlayerControl" />
+
+</android.support.constraint.ConstraintLayout>

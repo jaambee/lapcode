@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Lapp</string>
+    <string name="text_tutorials">Tutoriales</string>
+    <string name="text_evaluations">Evaluaciones</string>
+    <string name="text_profile">Perfil</string>
+    <string name="text_evolution">Evolución</string>
+
+    <string name="login_button">Iniciar sesión</string>
+    <string name="password_field">Contraseña</string>
+    <string name="email_field">Email</string>
+    <string name="text_video_library">Videos</string>
+    <string name="student">estudiante</string>
+    <string name="professor">profesor</string>
+    <string name="evaluation_end">FINALIZAR EVALUACIÓN</string>
+    <string name="add_feedback">AGREGAR FEEDBACK</string>
+    <string name="cambiar_email">Cambiar email</string>
+    <string name="change_password">Cambiar contraseña</string>
+</resources>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "705597714385",
+    "firebase_url": "https://lapp-162118.firebaseio.com",
+    "project_id": "lapp-162118",
+    "storage_bucket": "lapp-162118.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705597714385:android:635a1d353150721a",
+        "android_client_info": {
+          "package_name": "com.reframe.lapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705597714385-ctvap8b8sihrpiqq6ehgnpov9ramqmm4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reframe.lapp",
+            "certificate_hash": "eea68fc65595c5f47fed9d410dd18c82b40528a6"
+          }
+        },
+        {
+          "client_id": "705597714385-424vukkacc6qfboq3hokl66486mb6afi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAplulT3ADKemv-13NUk_A6HhbhbMYq9lM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705597714385-424vukkacc6qfboq3hokl66486mb6afi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
