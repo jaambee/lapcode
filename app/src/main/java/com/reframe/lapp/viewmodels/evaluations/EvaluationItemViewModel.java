@@ -26,7 +26,7 @@ public class EvaluationItemViewModel implements ViewModel {
         name = evaluation.getExercise();
         thumb = evaluation.getThumbnail();
         date = Utils.getDateParsed(evaluation.getCreatedAt());
-        level = Utils.getParsedLevel(evaluation.getLevel()).toUpperCase();
+        level = Utils.getParsedLevel(evaluation.getLevelName()).toUpperCase();
         approved = evaluation.getApproved();
         this.openDetails = ()-> navigator.openEvaluation(evaluation);
     }

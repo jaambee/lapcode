@@ -10,7 +10,7 @@ public class Constants {
     public static final String DEVICE_TOKEN               = "device_token";
     public static final String LAPP_EXTRA                 = "lapp_extra";
     public static final String SOCKET_SERVER_URL          = "http://yourserver.com";
-    public static final String DEV_API_URL                = "http://lapp.haip.cl";
+    public static final String DEV_API_URL                = "http://18.231.22.14/lapp/";
     public static final String PROD_API_URL               = "http://yourserver.com";
 
     public static final String BASIC                      = "basic";
@@ -25,4 +25,8 @@ public class Constants {
     public static final String VIDEO                      = "video";
     public static final String FEEDBACK                   = "feedback";
     public static final String TUTORIAL                   = "tutorial";
+
+    public static final String EVALUATION_DONE            = "EVALUATION_DONE";
+
+    public static final String PROFESSOR_EVALUATED        = "PROFESSOR_EVALUATED";
 }

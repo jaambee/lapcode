@@ -9,7 +9,7 @@ import javax.annotation.Generated;
 @SuppressWarnings("unused")
 public class User {
 
-    @SerializedName("age")
+    @SerializedName("birthDate")
     private String mAge;
     @SerializedName("country")
     private String mCountry;
@@ -39,6 +39,14 @@ public class User {
     private String mUpdatedAt;
     @SerializedName("_id")
     private String m_id;
+    @SerializedName("level")
+    private Level mLevel;
+
+
+
+    public static final String PROFESSOR = "PROFESSOR";
+
+    public static final String STUDENT = "STUDENT";
 
     public String getAge() {
         return mAge;
@@ -158,6 +166,14 @@ public class User {
 
     public void set_id(String _id) {
         m_id = _id;
+    }
+
+    public Level getLevel() {
+        return mLevel;
+    }
+
+    public void setLevel(Level level) {
+        mLevel = level;
     }
 
 }

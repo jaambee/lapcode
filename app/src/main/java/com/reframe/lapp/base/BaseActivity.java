@@ -5,21 +5,26 @@ package com.reframe.lapp.base;
  */
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.manaschaudhari.android_mvvm.MvvmActivity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -32,12 +37,15 @@ import com.reframe.lapp.models.Evaluation;
 import com.reframe.lapp.models.FeedBackResponse;
 import com.reframe.lapp.models.ImageUpload;
 import com.reframe.lapp.models.ProfessorEvaluation;
+import com.reframe.lapp.models.ProfessorScore;
 import com.reframe.lapp.models.Tutorial;
 import com.reframe.lapp.models.User;
 import com.reframe.lapp.models.VideoFeedback;
 import com.reframe.lapp.network.LappService;
+import com.reframe.lapp.utils.RxBus;
 import com.reframe.lapp.viewmodels.tutorials.VideoItemViewModel;
 import com.reframe.lapp.views.EvaluationView;
+import com.reframe.lapp.views.FeedbackEditorView;
 import com.reframe.lapp.views.Landing;
 import com.reframe.lapp.views.ListView;
 import com.reframe.lapp.views.MainActivity;
@@ -52,10 +60,7 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder;
-import cafe.adriel.androidaudiorecorder.model.AudioChannel;
-import cafe.adriel.androidaudiorecorder.model.AudioSampleRate;
-import cafe.adriel.androidaudiorecorder.model.AudioSource;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import gun0912.tedbottompicker.TedBottomPicker;
 import rx.Observable;
@@ -66,6 +71,7 @@ import rx.subscriptions.CompositeSubscription;
 import rx.subscriptions.Subscriptions;
 import rx_activity_result.Result;
 import rx_activity_result.RxActivityResult;
+import rx_fcm.internal.RxFcm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public abstract class BaseActivity extends MvvmActivity {
@@ -74,6 +80,7 @@ public abstract class BaseActivity extends MvvmActivity {
     private static int RECORD_REQUEST_CODE = 03;
     private static int VIDEO_FEEDBACK_REQUEST_CODE = 04;
     private static int VIDEO_LIST_REQUEST_CODE = 05;
+
     //container for batch RxJava unsubscription
     protected CompositeSubscription mCompositeSubscription;
     private ProgressDialog progress;
@@ -156,9 +163,7 @@ public abstract class BaseActivity extends MvvmActivity {
                         navigateListWithResult(VideoListView.class, items, VIDEO_LIST_REQUEST_CODE)
                                 .map(activityResult-> {
                                     Intent result = activityResult.data();
-                                    Log.d(TAG, "RESULT_LISTA>".concat(result.getData().toString()));
-                                    VideoFeedback callback = new Gson().fromJson(result.getData().toString(), VideoFeedback.class);
-                                    return callback;
+                                    return new Gson().fromJson(result.getData().toString(), VideoFeedback.class);
                                 }).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread());
             }
@@ -169,6 +174,52 @@ public abstract class BaseActivity extends MvvmActivity {
                 result.setData(Uri.parse(new Gson().toJson(video)));
                 setResult(RESULT_OK, result);
                 finish();
+            }
+
+            @Override
+            public void selectFeedback(FeedBackResponse feedbackQuery) {
+                Intent result = new Intent();
+                result.setData(Uri.parse(new Gson().toJson(feedbackQuery)));
+                setResult(RESULT_OK, result);
+
+                finish();
+            }
+
+            @Override
+            public void evaluate(ProfessorEvaluation evaluation) {
+                mCompositeSubscription.add(
+                        LappService.evaluate(evaluation)
+                        .subscribe(successResponse -> {
+                            if(successResponse.success) {
+                                showToast("Evaluación guardada con éxito");
+                                RxBus.getInstance().publish("UPDATE");
+                            }
+                        }, Throwable::printStackTrace, () -> finish())
+                );
+            }
+
+            @Override
+            public void evaluateProfessor(ProfessorScore score) {
+                mCompositeSubscription.add(
+                        LappService.evaluateProfessor(score)
+                        .subscribe(successResponse -> {
+                            showToast("Profesor evaluado con éxito");
+                        }, Throwable::printStackTrace, () -> finish())
+                );
+            }
+
+            @Override
+            public Observable<FeedBackResponse>  openFeedbackEditor(ProfessorEvaluation evaluation) {
+                return navigateWithResult(FeedbackEditorView.class, evaluation, VIDEO_LIST_REQUEST_CODE)
+                    .map(baseActivityResult -> {
+                        Intent result = baseActivityResult.data();
+                        if(result!= null)
+                            return new Gson().fromJson(result.getData().toString(), FeedBackResponse.class);
+                        else
+                            return new FeedBackResponse();
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
             }
 
             @Override
@@ -268,7 +319,7 @@ public abstract class BaseActivity extends MvvmActivity {
                 dialog.show();
             }
 
-            @Override
+            /*@Override
             public Observable<FeedBackResponse> addFeedback(String exerciseId) {
 	            FeedBackResponse result = new FeedBackResponse();
                     return LappService.getVideoFeedbackList(exerciseId)
@@ -284,11 +335,11 @@ public abstract class BaseActivity extends MvvmActivity {
 	                       return result;
                         })
                         .doOnNext(feedback->Log.d(TAG, "Feedback SELECTED=audio>".concat(feedback.getAudio()).concat(",video>").concat(feedback.getVideo())));
-            }
+            }*/
 
             @Override
             public Observable<AudioFeedback> recordAudio() {
-                String filePath = Environment.getExternalStorageDirectory() + "/recorded_audio.wav";
+                /*String filePath = Environment.getExternalStorageDirectory() + "/recorded_audio.wav";
                 int color = getResources().getColor(R.color.colorPrimaryDark);
                 audio = PublishSubject.create();
                 AndroidAudioRecorder.with(BaseActivity.this)
@@ -306,7 +357,7 @@ public abstract class BaseActivity extends MvvmActivity {
 
                         // Start recording
                         .record();
-
+                */
                 audio.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
                 return audio.flatMap(audioCreated -> LappService.createAudio(audioCreated.getUrl()));
@@ -330,6 +381,24 @@ public abstract class BaseActivity extends MvvmActivity {
             }
 
             @Override
+            public void downloadFile(String url, String filename, String id, FileDownloadListener listener) {
+                mCompositeSubscription.add(rxPermissions.request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(hasPermission -> {
+                            if(hasPermission) {
+                                FileDownloader.setup(BaseActivity.this);
+                                FileDownloader.getImpl().create(url)
+                                        .setPath(Environment.getExternalStorageDirectory().getPath().concat("/").concat(filename).concat(".mp4"))
+                                        .setListener(listener)
+                                        .start();
+                                Toast.makeText(getApplicationContext(),Environment.getExternalStorageDirectory().getPath().concat("/").concat(filename).concat(".mp4"), Toast.LENGTH_SHORT).show();
+                            } else
+                                Toast.makeText(getApplicationContext(),"Debe autorizar el uso de la SD", Toast.LENGTH_SHORT).show();
+                        }));
+
+
+            }
+
+            @Override
             public Observable<ImageUpload> selectImage() {
                 progress = new ProgressDialog(BaseActivity.this);
                 return Observable.create(subscriber -> {
@@ -345,7 +414,7 @@ public abstract class BaseActivity extends MvvmActivity {
                                             })
                                             .create().show(getSupportFragmentManager());
                                 } else
-                                    Toast.makeText(getApplicationContext(),"Debe autorizar el uso de la cámara", Toast.LENGTH_SHORT);
+                                    Toast.makeText(getApplicationContext(),"Debe autorizar el uso de la cámara", Toast.LENGTH_SHORT).show();
                             }));
                 });
             }
@@ -353,11 +422,22 @@ public abstract class BaseActivity extends MvvmActivity {
             private void copyToClipboard(String text) {
                 android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 android.content.ClipData clip = android.content.ClipData.newPlainText("Texto copiado", text);
-                clipboard.setPrimaryClip(clip);
+                if (clipboard != null) {
+                    clipboard.setPrimaryClip(clip);
+                }
             }
 
-            private void showToast(String message) {
+            @Override
+            public void showToast(String message) {
                 Toast.makeText(BaseActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void showSweetAlert(String title, String message) {
+                new SweetAlertDialog(BaseActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText(title)
+                        .setContentText(message)
+                        .show();
             }
 
             private void navigate(Class<?> destination) {
@@ -439,6 +519,16 @@ public abstract class BaseActivity extends MvvmActivity {
 
     }
 
+    public void uploadDeviceToken() {
+
+        mCompositeSubscription.add(RxFcm.Notifications.currentToken()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(s->Log.d("DEVICE_TOKEN", s))
+                .flatMap(LappService::setDeviceToken)
+                .subscribe(accessToken -> Log.d("DEVICE_RESPONSE", accessToken.success.toString()), Throwable::printStackTrace, () -> {}));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -466,6 +556,7 @@ public abstract class BaseActivity extends MvvmActivity {
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
+        //Medescope.getInstance(this).unsubscribeStatus(this);
     }
 
     @Override

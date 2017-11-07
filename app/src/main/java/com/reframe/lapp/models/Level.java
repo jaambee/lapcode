@@ -1,28 +1,19 @@
 
 package com.reframe.lapp.models;
 
-import com.google.gson.annotations.SerializedName;
-
 import javax.annotation.Generated;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class Level {
 
-    @SerializedName("available")
-    private Boolean mAvailable;
     @SerializedName("id")
     private String mId;
     @SerializedName("name")
     private String mName;
-
-    public Boolean getAvailable() {
-        return mAvailable;
-    }
-
-    public void setAvailable(Boolean available) {
-        mAvailable = available;
-    }
+    @SerializedName("order")
+    private Long mOrder;
 
     public String getId() {
         return mId;
@@ -38,6 +29,14 @@ public class Level {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public Long getOrder() {
+        return mOrder;
+    }
+
+    public void setOrder(Long order) {
+        mOrder = order;
     }
 
 }

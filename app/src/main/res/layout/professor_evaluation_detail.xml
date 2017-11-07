@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
@@ -16,8 +17,8 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true">
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
@@ -72,16 +73,20 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/player" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/userIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:src="@drawable/ic_account_circle_grey600_24dp"
+                app:civ_border_color="#FFFFFFFF"
+                app:civ_border_width="2dp"
+                app:imageUrl="@{vm.picture}"
                 app:layout_constraintLeft_toLeftOf="@+id/exerciseName"
                 app:layout_constraintTop_toBottomOf="@+id/exerciseName"
-                app:srcCompat="@drawable/ic_person_black_24dp" />
+                app:srcCompat="@drawable/ic_account_circle_grey600_24dp"/>
 
             <TextView
                 android:id="@+id/userName"
@@ -224,29 +229,32 @@
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="23dp"
                 android:text="TIEMPO ALUMNO"
                 android:textColor="@color/colorGray"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintRight_toLeftOf="@+id/currentTime"
-                app:layout_constraintTop_toBottomOf="@+id/sep2" />
+                app:layout_constraintStart_toEndOf="@+id/idealTimeValue"
+                app:layout_constraintTop_toBottomOf="@+id/sep2"
+                android:layout_marginLeft="16dp"/>
 
             <TextView
-                android:id="@+id/currentTime"
+                android:id="@+id/currentTimeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="600 SEG"
-                android:textAlignment="viewEnd"
+                android:layout_marginStart="8dp"
                 android:gravity="end"
+                android:text="SEG"
+                android:textAlignment="viewEnd"
                 android:textColor="@color/colorGray"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView11"
                 app:layout_constraintRight_toRightOf="@+id/sep3"
+                app:layout_constraintStart_toEndOf="@+id/currentTime"
                 app:layout_constraintTop_toTopOf="@+id/textView11"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                android:layout_marginLeft="8dp"/>
 
             <LinearLayout
                 android:id="@+id/scalesContainer"
@@ -285,6 +293,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/colorPrimaryDark"
                 android:onClick="@{vm.addFeedback}"
+                android:visibility="@{!vm.isEvaluated}"
                 android:text="@string/add_feedback"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -301,10 +310,33 @@
                 android:background="@color/colorPrimaryDark"
                 android:text="@string/evaluation_end"
                 android:onClick="@{vm.sendEvaluation}"
+                android:visibility="@{!vm.isEvaluated}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addFeedback"/>
+
+            <EditText
+                android:id="@+id/currentTime"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:cursorVisible="true"
+                android:ems="10"
+                android:hint="0"
+                android:inputType="number"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/colorPrimary"
+                android:textColorHighlight="@color/colorPrimary"
+                android:textColorLink="@color/colorPrimary"
+                android:textSize="14sp"
+                app:bindEditText="@{vm.evaluation}"
+                app:layout_constraintBottom_toBottomOf="@+id/textView11"
+                app:layout_constraintStart_toEndOf="@+id/textView11"
+                app:layout_constraintTop_toTopOf="@+id/textView11"/>
+
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </layout>

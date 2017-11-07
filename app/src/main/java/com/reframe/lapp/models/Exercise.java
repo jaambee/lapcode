@@ -17,6 +17,8 @@ public class Exercise {
     private String mName;
     @SerializedName("tutorials")
     private List<Tutorial> mTutorials;
+    @SerializedName("feedBack")
+    private List<VideoFeedback> mFeedBack;
 
     public String getId() {
         return mId;
@@ -40,6 +42,14 @@ public class Exercise {
 
     public void setTutorials(List<Tutorial> tutorials) {
         mTutorials = tutorials;
+    }
+
+    public List<VideoFeedback> getVideoFeedbacks() {
+        return mFeedBack;
+    }
+
+    public void setVideoFeedbacks(List<VideoFeedback> videoFeedbacks) {
+        mFeedBack = videoFeedbacks;
     }
 
 }

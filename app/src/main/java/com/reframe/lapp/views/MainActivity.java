@@ -10,17 +10,24 @@ import com.manaschaudhari.android_mvvm.ViewModel;
 import com.reframe.lapp.R;
 import com.reframe.lapp.adapters.MainNavigationAdapter;
 import com.reframe.lapp.base.BaseActivity;
+import com.reframe.lapp.constants.Notifications;
+import com.reframe.lapp.network.LappService;
 import com.reframe.lapp.viewmodels.MainViewModel;
 import com.reframe.lapp.views.main.EvaluationsFragment;
 import com.reframe.lapp.views.main.EvolutionFragment;
 import com.reframe.lapp.views.main.ProfileFragment;
 import com.reframe.lapp.views.main.TutorialFragment;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx_fcm.internal.RxFcm;
+
 public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uploadDeviceToken();
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         viewPager.setOffscreenPageLimit(4);
@@ -68,6 +75,11 @@ public class MainActivity extends BaseActivity {
             }
             return false;
         });
+        if(getIntent().getStringExtra("notification_type")!=null){
+            String type = getIntent().getStringExtra("notification_type");
+            if(type.equals(Notifications.NEW_LEVEL))
+                getNavigator().showSweetAlert("FELICITACIONES", "Haz subido de nivel!");
+        }
     }
 
     @NonNull

@@ -13,7 +13,7 @@ public class RxBus {
 
     private PublishSubject<Object> subject = PublishSubject.create();
 
-    public static RxBus getInstance() {
+    public static synchronized RxBus getInstance() {
         if(instance == null)
             instance = new RxBus();
         return instance;

@@ -1,5 +1,7 @@
 package com.reframe.lapp.network.notifications;
 
+import android.util.Log;
+
 import rx.Observable;
 import rx_fcm.FcmReceiverUIBackground;
 import rx_fcm.Message;
@@ -12,7 +14,9 @@ public class AppFcmReceiverUIBackground implements FcmReceiverUIBackground {
     @Override
     public void onNotification(Observable<Message> oMessage) {
         oMessage.subscribe(message -> {
-            /*String jsonPayload = message.payload().getString("payload");
+            String jsonPayload = message.payload().getString("payload");
+            Log.d("NEW NOTIFICATION BACK",jsonPayload);
+            /*
             try {
                 JSONObject object = new JSONObject(jsonPayload);
                 String title = object.getString("title");

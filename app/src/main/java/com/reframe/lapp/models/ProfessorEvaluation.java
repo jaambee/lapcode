@@ -22,15 +22,20 @@ public class ProfessorEvaluation {
     @SerializedName("exerciseId")
     private String mExerciseId;
     @SerializedName("feedBack")
-    private List<FeedBackResponse> mFeedBack;
+    private List<FeedBackResponse> mFeedBackResponse;
+    @SerializedName("times")
+    private List<Time> mTimes;
+    private List<FeedbackQuery> mFeedBack;
     @SerializedName("group")
     private String mGroup;
     @SerializedName("id")
     private String mId;
     @SerializedName("info")
     private String mInfo;
-    @SerializedName("level")
-    private String mLevel;
+    @SerializedName("levelName")
+    private String mLevelName;
+    @SerializedName("levelId")
+    private String mLevelId;
     @SerializedName("picture")
     private String mPicture;
     @SerializedName("scales")
@@ -43,6 +48,8 @@ public class ProfessorEvaluation {
     private String mThumbnail;
     @SerializedName("time")
     private Long mTime;
+    @SerializedName("approveTime")
+    private Long mApproveTime;
     @SerializedName("video")
     private String mVideo;
 
@@ -86,16 +93,30 @@ public class ProfessorEvaluation {
         mExerciseId = exerciseId;
     }
 
-    public List<FeedBackResponse> getFeedBack() {
+    public List<Time> getTimes() {
+        return mTimes;
+    }
+
+    public void setTimes(List<Time> times) {
+        mTimes = times;
+    }
+
+    public List<FeedbackQuery> getFeedBack() {
         return mFeedBack;
     }
 
-    public void setFeedBack(List<FeedBackResponse> feedBack) {
+    public void setFeedBack(List<FeedbackQuery> feedBack) {
         mFeedBack = feedBack;
     }
 
+    public List<FeedBackResponse> getFeedBackResponse() {
+        return mFeedBackResponse;
+    }
+
+    public void setFeedBackResponse(List<FeedBackResponse> feedBack) { mFeedBackResponse = feedBack; }
+
     public void addFeedback(FeedBackResponse feedBack) {
-        mFeedBack.add(feedBack);
+        mFeedBackResponse.add(feedBack);
     }
 
     public String getGroup() {
@@ -122,12 +143,20 @@ public class ProfessorEvaluation {
         mInfo = info;
     }
 
-    public String getLevel() {
-        return mLevel;
+    public String getLevelName() {
+        return mLevelName;
     }
 
-    public void setLevel(String level) {
-        mLevel = level;
+    public void setLevelName(String levelName) {
+        mLevelName = levelName;
+    }
+
+    public String getLevelId() {
+        return mLevelId;
+    }
+
+    public void setLevelId(String levelId) {
+        mLevelId = levelId;
     }
 
     public String getPicture() {
@@ -176,6 +205,14 @@ public class ProfessorEvaluation {
 
     public void setTime(Long time) {
         mTime = time;
+    }
+
+    public Long getApproveTime() {
+        return mApproveTime;
+    }
+
+    public void setApproveTime(Long approveTime) {
+        mApproveTime= approveTime;
     }
 
     public String getVideo() {

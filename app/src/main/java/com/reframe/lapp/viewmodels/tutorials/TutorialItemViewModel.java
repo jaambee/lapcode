@@ -35,6 +35,9 @@ public class TutorialItemViewModel implements ViewModel {
         this.openCell = () -> {
             if(isUnlocked)
                 isOpen.set(true);
+            else {
+                navigator.showToast("Debes completar los grupos anteriores para acceder");
+            }
         };
         this.closeCell = () -> {
             if(isUnlocked)

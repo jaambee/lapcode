@@ -12,11 +12,13 @@ import com.reframe.lapp.models.BaseResponse;
 import com.reframe.lapp.models.BaseResponseList;
 import com.reframe.lapp.models.Evaluation;
 import com.reframe.lapp.models.EvolutionData;
+import com.reframe.lapp.models.FeedbackQuery;
 import com.reframe.lapp.models.Group;
 import com.reframe.lapp.models.ImageUpload;
 import com.reframe.lapp.models.Level;
 import com.reframe.lapp.models.Media;
 import com.reframe.lapp.models.ProfessorEvaluation;
+import com.reframe.lapp.models.ProfessorScore;
 import com.reframe.lapp.models.Student;
 import com.reframe.lapp.models.SuccessResponse;
 import com.reframe.lapp.models.User;
@@ -91,9 +93,18 @@ public class LappService {
                 .observeOn(AndroidSchedulers.mainThread()) ;
     }
 
-    public static Observable<List<ProfessorEvaluation>> getProfessorEvaluationTimeline(String username, String level) {
+    public static Observable<List<ProfessorEvaluation>> getProfessorEvaluationTimeline() {
         String token = Prefs.getString(Constants.LAPP_TOKEN, "");
-        return getClient().getProfessorEvaluationTimeline(token, username, level).map(BaseResponseList::getData)
+        return getClient().getProfessorEvaluationTimeline(token).map(BaseResponseList::getData)
+                .flatMap(Observable::from)
+                .map(baseResponse -> convertFromObject(baseResponse, ProfessorEvaluation.class)).toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()) ;
+    }
+
+    public static Observable<List<ProfessorEvaluation>> getProfessorEvaluationTimelineFiltered(String username, String level) {
+        String token = Prefs.getString(Constants.LAPP_TOKEN, "");
+        return getClient().getProfessorEvaluationTimelineFiltered(token, username, level).map(BaseResponseList::getData)
                 .flatMap(Observable::from)
                 .map(baseResponse -> convertFromObject(baseResponse, ProfessorEvaluation.class)).toList()
                 .subscribeOn(Schedulers.io())
@@ -107,7 +118,7 @@ public class LappService {
                 .flatMap(Observable::from)
                 .map(baseResponse -> convertFromObject(baseResponse, Student.class)).toList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()) ;
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -118,7 +129,7 @@ public class LappService {
                 .flatMap(Observable::from)
                 .map(baseResponse -> convertFromObject(baseResponse, EvolutionData.class)).toList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()) ;
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -129,12 +140,18 @@ public class LappService {
                 .flatMap(Observable::from)
                 .map(baseResponse -> convertFromObject(baseResponse, EvolutionData.class)).toList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()) ;
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public static Observable<AudioFeedback> createAudio(String url) {
         String token = Prefs.getString(Constants.LAPP_TOKEN, "");
         return getClient().createMedia(url, Constants.AUDIO).map(baseResponse -> convertFromBase(baseResponse, AudioFeedback.class))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<SuccessResponse> addFeedback(String evaluationId, FeedbackQuery query) {
+        String token = Prefs.getString(Constants.LAPP_TOKEN, "");
+        return getClient().addFeedBack(token, evaluationId, query).map(baseResponse -> convertFromBase(baseResponse, SuccessResponse.class))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -144,7 +161,7 @@ public class LappService {
                 .flatMap(Observable::from)
                 .map(baseResponse -> convertFromObject(baseResponse, Group.class)).toList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()) ;
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public static Observable<List<VideoFeedback>> getVideoFeedbackList(String exerciseId) {
@@ -153,7 +170,16 @@ public class LappService {
                 .flatMap(Observable::from)
                 .map(baseResponse -> convertFromObject(baseResponse, VideoFeedback.class)).toList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()) ;
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<List<Group>> getProfessorVideoFeedbackList(String level) {
+        String token = Prefs.getString(Constants.LAPP_TOKEN, "");
+        return getClient().getProfessorVideoFeedbackList(token, level).map(BaseResponseList::getData)
+                .flatMap(Observable::from)
+                .map(baseResponse -> convertFromObject(baseResponse, Group.class)).toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public static Observable<AccessToken> login(String email, String password) {
@@ -196,6 +222,22 @@ public class LappService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public static Observable<SuccessResponse> evaluate(ProfessorEvaluation evaluation) {
+        String token = Prefs.getString(Constants.LAPP_TOKEN, "");
+        return getClient().evaluateAsProfessor(token, evaluation)
+                .map(baseResponse -> convertFromBase(baseResponse, SuccessResponse.class))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static Observable<SuccessResponse> evaluateProfessor(ProfessorScore score) {
+        String token = Prefs.getString(Constants.LAPP_TOKEN, "");
+        return getClient().evaluateProfessor(token, score)
+                .map(baseResponse -> convertFromBase(baseResponse, SuccessResponse.class))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public static Observable<ImageUpload> uploadImage(String path) {
         File file = new File(path);
 
@@ -225,5 +267,16 @@ public class LappService {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
         return type;
+    }
+
+
+    public static Observable<SuccessResponse> setDeviceToken(String deviceToken){
+        String token = Prefs.getString(Constants.LAPP_TOKEN, "");
+        Prefs.putString(Constants.DEVICE_TOKEN, deviceToken);
+        Log.d("TOKEN", deviceToken);
+        return getClient().setDeviceToken(token, deviceToken, "android")
+                .map(baseResponse -> convertFromBase(baseResponse, SuccessResponse.class))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

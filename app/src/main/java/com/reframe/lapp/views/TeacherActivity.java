@@ -20,6 +20,7 @@ public class TeacherActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uploadDeviceToken();
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         viewPager.setOffscreenPageLimit(3);
@@ -58,6 +59,7 @@ public class TeacherActivity extends BaseActivity {
                 case R.id.action_profile:
                     Log.d("MENU", "PROFILE");
                     viewPager.setCurrentItem(2);
+                    //getNavigator().openFeedbackEditor();
                     return true;
             }
             return false;

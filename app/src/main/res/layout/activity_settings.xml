@@ -171,13 +171,29 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="0dp"
-            android:text="Ayuda"
+            android:text="Acerca de"
             android:textAppearance="@android:style/TextAppearance.Material.Button"
             android:textColor="@color/colorGray"
             bind:layout_constraintHorizontal_bias="0.0"
             bind:layout_constraintLeft_toLeftOf="parent"
             bind:layout_constraintRight_toRightOf="parent"
             bind:layout_constraintTop_toBottomOf="@+id/conditions" />
+
+        <Button
+            android:id="@+id/contact"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="0dp"
+            android:text="Contacto - Soporte"
+            android:textAppearance="@android:style/TextAppearance.Material.Button"
+            android:textColor="@color/colorGray"
+            bind:layout_constraintHorizontal_bias="0.0"
+            bind:layout_constraintLeft_toLeftOf="parent"
+            bind:layout_constraintRight_toRightOf="parent"
+            bind:layout_constraintTop_toBottomOf="@+id/help" />
 
         <TextView
             android:id="@+id/configLabel"
@@ -190,7 +206,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             bind:layout_constraintLeft_toLeftOf="parent"
-            bind:layout_constraintTop_toBottomOf="@+id/help" />
+            bind:layout_constraintTop_toBottomOf="@+id/contact" />
 
         <View
             android:id="@+id/sep3"

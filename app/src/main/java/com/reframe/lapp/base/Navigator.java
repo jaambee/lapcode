@@ -1,13 +1,19 @@
 package com.reframe.lapp.base;
 
+import android.content.DialogInterface;
+
+import com.liulishuo.filedownloader.FileDownloadListener;
 import com.reframe.lapp.models.AudioFeedback;
 import com.reframe.lapp.models.Evaluation;
 import com.reframe.lapp.models.FeedBackResponse;
+import com.reframe.lapp.models.FeedbackQuery;
 import com.reframe.lapp.models.ImageUpload;
 import com.reframe.lapp.models.ProfessorEvaluation;
+import com.reframe.lapp.models.ProfessorScore;
 import com.reframe.lapp.models.Tutorial;
 import com.reframe.lapp.models.VideoFeedback;
 
+import java.io.File;
 import java.util.List;
 
 import rx.Observable;
@@ -44,6 +50,14 @@ public interface Navigator {
 
     void selectVideoFeedback(VideoFeedback video);
 
+    void selectFeedback(FeedBackResponse feedbackQuery);
+
+    void evaluate(ProfessorEvaluation evaluation);
+
+    void evaluateProfessor(ProfessorScore score);
+
+    Observable<FeedBackResponse> openFeedbackEditor(ProfessorEvaluation evaluation);
+
     void openEvolution();
 
     void openProfile();
@@ -52,7 +66,7 @@ public interface Navigator {
 
 	void changePassword();
 
-    Observable<FeedBackResponse> addFeedback(String exerciseId);
+    //Observable<FeedBackResponse> addFeedback(String exerciseId);
 
     Observable<AudioFeedback> recordAudio();
 
@@ -62,5 +76,10 @@ public interface Navigator {
 
     void closeActivity();
 
+    void downloadFile(String url, String filename, String id, FileDownloadListener listener);
+
+    void showToast(String message);
+
+    void showSweetAlert(String title, String message);
     Observable<ImageUpload> selectImage();
 }

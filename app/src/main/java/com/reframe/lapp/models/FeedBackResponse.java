@@ -10,44 +10,44 @@ import javax.annotation.Generated;
 public class FeedBackResponse {
 
     @SerializedName("audio")
-    private String mAudio;
+    private Audio mAudio;
     @SerializedName("video")
-    private String mVideo;
+    private Video mVideo;
 
     private String mAudioUrl;
 
     private String mVideoUrl;
 
 
-    public String getAudio() {
+    public Audio getAudio() {
         return mAudio;
     }
 
-    public void setAudio(String audio) {
+    public void setAudio(Audio audio) {
         mAudio = audio;
     }
 
-    public String getVideo() {
+    public Video getVideo() {
         return mVideo;
     }
 
-    public void setVideo(String video) {
+    public void setVideo(Video video) {
         mVideo = video;
     }
 
     public String getAudioUrl() {
-        return mAudioUrl;
+        return mAudio.getUrl();
     }
 
     public void setAudioUrl(String mAudioUrl) {
-        this.mAudioUrl = mAudioUrl;
+        this.mAudio.setUrl(mAudioUrl);
     }
 
     public String getVideoUrl() {
-        return mVideoUrl;
+        return mVideo.getUrl();
     }
 
     public void setVideoUrl(String mVideoUrl) {
-        this.mVideoUrl = mVideoUrl;
+        this.mVideo.setUrl(mVideoUrl);
     }
 }

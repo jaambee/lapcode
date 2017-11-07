@@ -25,12 +25,12 @@
             android:layout_marginTop="16dp"
             android:background="@color/colorGray"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoThumb"
+            app:layout_constraintTop_toBottomOf="@+id/video"
             bind:layout_constraintLeft_toLeftOf="parent"
             bind:layout_constraintRight_toRightOf="parent" />
 
         <ImageView
-            android:id="@+id/videoThumb"
+            android:id="@+id/video"
             android:layout_width="90dp"
             android:layout_height="60dp"
             android:layout_marginEnd="16dp"
@@ -48,11 +48,11 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:onClick="@{vm.openDetails}"
-            app:layout_constraintLeft_toLeftOf="@+id/videoThumb"
-            app:layout_constraintRight_toRightOf="@+id/videoThumb"
-            app:layout_constraintTop_toTopOf="@+id/videoThumb"
+            app:layout_constraintLeft_toLeftOf="@+id/video"
+            app:layout_constraintRight_toRightOf="@+id/video"
+            app:layout_constraintTop_toTopOf="@+id/video"
             app:srcCompat="@drawable/ic_lapp_play"
-            app:layout_constraintBottom_toBottomOf="@+id/videoThumb"
+            app:layout_constraintBottom_toBottomOf="@+id/video"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp" />
 
@@ -82,7 +82,7 @@
             android:text="@{vm.date}"
             android:textColor="@color/colorGray"
             android:textSize="12sp"
-            app:layout_constraintTop_toTopOf="@+id/videoThumb"
+            app:layout_constraintTop_toTopOf="@+id/video"
             app:layout_constraintLeft_toRightOf="@+id/playButton"
             android:layout_marginLeft="8dp" />
 
@@ -92,9 +92,9 @@
             android:layout_height="wrap_content"
             android:src="@{vm.approved? @drawable/ic_lapp_check: @drawable/ic_lapp_nocheck}"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/videoThumb"
+            app:layout_constraintTop_toTopOf="@+id/video"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/videoThumb"
+            app:layout_constraintBottom_toBottomOf="@+id/video"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="16dp" />
 

@@ -4,6 +4,7 @@ package com.reframe.lapp.adapters;
  * Created by Aldo on 17-11-2016.
  */
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.databinding.BindingAdapter;
@@ -16,6 +17,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
@@ -24,11 +26,15 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -40,6 +46,8 @@ import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.view.LineChartView;
 import com.eugeneek.smilebar.SmileBar;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.github.lzyzsd.circleprogress.CircleProgress;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.manaschaudhari.android_mvvm.ViewModel;
 import com.manaschaudhari.android_mvvm.adapters.ViewModelBinder;
 import com.manaschaudhari.android_mvvm.adapters.ViewProvider;
@@ -57,7 +65,9 @@ import com.reframe.lapp.models.Exercise;
 import com.reframe.lapp.models.FeedBack;
 import com.reframe.lapp.models.FeedBackResponse;
 import com.reframe.lapp.models.ProfessorEvaluation;
+import com.reframe.lapp.models.ProfessorScore;
 import com.reframe.lapp.models.Scale;
+import com.reframe.lapp.models.Time;
 import com.reframe.lapp.viewmodels.EvolutionViewModel;
 import com.reframe.lapp.viewmodels.MainViewModel;
 import com.reframe.lapp.viewmodels.TeacherViewModel;
@@ -179,6 +189,108 @@ public class BindingAdapters {
         }
     }
 
+    @BindingAdapter("progressChange")
+    public static void setProgressChange(DonutProgress view, int progress) {
+        if(view != null) {
+            view.setProgress(progress);
+        }
+    }
+
+    @BindingAdapter("bindEditText")
+    public static void setBindEditText(EditText view, ProfessorEvaluation evaluation) {
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                evaluation.setTime(Long.getLong(s.toString()));
+            }
+        };
+
+        if(view != null && evaluation != null) {
+            if(!evaluation.getEvaluated()) {
+                view.setEnabled(true);
+                view.addTextChangedListener(watcher);
+            } else {
+                view.setEnabled(false);
+                view.removeTextChangedListener(watcher);
+            }
+        }
+    }
+
+    @BindingAdapter("professorEvaluation")
+    public static void setProfessorEvaluation(ConstraintLayout view, ProfessorScore pScore) {
+        SmileBar score = (SmileBar) view.findViewById(R.id.feedbackProfessor);
+        EditText comment = (EditText) view.findViewById(R.id.feedbackText);
+
+        comment.setVisibility(View.GONE);
+        comment.setAlpha(0f);
+        score.setOnRatingSliderChangeListener(new SmileBar.OnRatingSliderChangeListener() {
+            @Override
+            public void onPendingRating(int i) {
+
+            }
+
+            @Override
+            public void onFinalRating(int i) {
+                Log.d("PROFESSOR_RATING", String.valueOf(i));
+                pScore.setRate(i);
+                if(i < 4) {
+
+                    comment.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            pScore.setFeedBack(s.toString());
+                        }
+                    });
+                    comment
+                            .animate()
+                            .withStartAction(() -> {
+                                comment.setVisibility(View.VISIBLE);
+                            })
+                            .scaleY(1f)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .start();
+                } else {
+
+                    comment
+                            .animate()
+                            .withEndAction(() -> {
+                                comment.setVisibility(View.GONE);
+                            })
+                            .scaleY(0f)
+                            .alpha(0f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .start();
+                }
+            }
+
+            @Override
+            public void onCancelRating() {
+
+            }
+        });
+    }
+
     @BindingAdapter("foldingCell")
     public static void setFoldingCell(FoldingCell foldingCell, Boolean status) {
         if(foldingCell != null) {
@@ -262,7 +374,7 @@ public class BindingAdapters {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
         container.removeAllViews();
         if(evaluation != null && evaluation.getScales() != null) {
-            for(Scale scale:evaluation.getScales()) {
+            for (Scale scale : evaluation.getScales()) {
                 LinearLayout subContainer = new LinearLayout(container.getContext());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 subContainer.setLayoutParams(params);
@@ -270,7 +382,7 @@ public class BindingAdapters {
                 TextView scaleTitle = new TextView(container.getContext());
                 scaleTitle.setText(scale.getName());
                 scaleTitle.setTypeface(null, Typeface.BOLD);
-                scaleTitle.setPadding(64, 0,0,0);
+                scaleTitle.setPadding(64, 0, 0, 0);
                 scaleTitle.setTextColor(container.getResources().getColor(R.color.colorPrimaryDark));
                 scaleTitle.setTextSize(16);
                 scaleTitle.setLayoutParams(params);
@@ -279,46 +391,93 @@ public class BindingAdapters {
                 TextView scalePoints = new TextView(container.getContext());
                 String text = "<font color=#757575>Puntaje:</font> <b><font color=#ffb300>".concat(String.valueOf(0)).concat("</font></b>");
                 scalePoints.setText(Html.fromHtml(text));
-                scalePoints.setPadding(0, 0,64,0);
+                scalePoints.setPadding(0, 0, 64, 0);
                 scalePoints.setTextColor(container.getResources().getColor(R.color.colorPrimaryDark));
                 scalePoints.setGravity(Gravity.RIGHT);
                 scalePoints.setLayoutParams(params);
                 scale.setPoints(new Long(0));
-                for (Datum datum:scale.getData()) {
+                for (Datum datum : scale.getData()) {
                     View scaleView = inflater.inflate(R.layout.scale_view, null);
                     TextView name = (TextView) scaleView.findViewById(R.id.scaleName);
                     SmileBar value = (SmileBar) scaleView.findViewById(R.id.scaleValue);
                     name.setText(datum.getName());
-                    value.setRating(datum.getPoints().intValue());
-                    value.setEnabled(true);
-                    value.setOnRatingSliderChangeListener(new SmileBar.OnRatingSliderChangeListener() {
-                        @Override
-                        public void onPendingRating(int i) {
-                            scale.setPoints(scale.getPoints()-datum.getPoints()+new Long(i));
-                            datum.setPoints(new Long(i));
-                            String text = "<font color=#757575>Puntaje:</font> <b><font color=#ffb300>".concat(String.valueOf(scale.getPoints().intValue())).concat("</font></b>");
-                            scalePoints.setText(Html.fromHtml(text));
-                        }
+                    value.setRating((datum.getPoints() != null) ? 0 : datum.getPoints().intValue());
+                    value.setEnabled(!evaluation.getEvaluated());
+                    if (!evaluation.getEvaluated()) {
+                        value.setOnRatingSliderChangeListener(new SmileBar.OnRatingSliderChangeListener() {
+                            @Override
+                            public void onPendingRating(int i) {
+                                scale.setPoints(scale.getPoints() - datum.getPoints() + new Long(i));
+                                datum.setPoints(new Long(i));
+                                String text = "<font color=#757575>Puntaje:</font> <b><font color=#ffb300>".concat(String.valueOf(scale.getPoints().intValue())).concat("</font></b>");
+                                scalePoints.setText(Html.fromHtml(text));
+                            }
 
-                        @Override
-                        public void onFinalRating(int i) {
-                            scale.setPoints(scale.getPoints()-datum.getPoints()+new Long(i));
-                            datum.setPoints(new Long(i));
-                            String text = "<font color=#757575>Puntaje:</font> <b><font color=#ffb300>".concat(String.valueOf(scale.getPoints().intValue())).concat("</font></b>");
-                            scalePoints.setText(Html.fromHtml(text));
-                        }
+                            @Override
+                            public void onFinalRating(int i) {
+                                scale.setPoints(scale.getPoints() - datum.getPoints() + new Long(i));
+                                datum.setPoints(new Long(i));
+                                String text = "<font color=#757575>Puntaje:</font> <b><font color=#ffb300>".concat(String.valueOf(scale.getPoints().intValue())).concat("</font></b>");
+                                scalePoints.setText(Html.fromHtml(text));
+                            }
 
-                        @Override
-                        public void onCancelRating() {
+                            @Override
+                            public void onCancelRating() {
 
-                        }
-                    });
-                    scale.setPoints(scale.getPoints()+datum.getPoints());
+                            }
+                        });
+                    }
+                    scale.setPoints(scale.getPoints() + datum.getPoints());
                     subContainer.addView(scaleView);
                 }
 
                 subContainer.addView(scalePoints);
                 container.addView(subContainer);
+            }
+
+            if (evaluation != null && evaluation.getTimes() != null && evaluation.getTimes().size()>0) {
+                LinearLayout timesContainer = new LinearLayout(container.getContext());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                timesContainer.setLayoutParams(params);
+                timesContainer.setOrientation(LinearLayout.VERTICAL);
+
+                TextView timesTitle = new TextView(container.getContext());
+                timesTitle.setText("TIEMPOS");
+                timesTitle.setTypeface(null, Typeface.BOLD);
+                timesTitle.setPadding(64, 0,0,0);
+                timesTitle.setTextColor(container.getResources().getColor(R.color.colorPrimaryDark));
+                timesTitle.setTextSize(16);
+                timesTitle.setLayoutParams(params);
+                timesContainer.addView(timesTitle);
+                for (Time time : evaluation.getTimes()) {
+
+                    View timeView = inflater.inflate(R.layout.time_view, null);
+                    TextView name = (TextView) timeView.findViewById(R.id.timeName);
+                    TextView ref = (TextView) timeView.findViewById(R.id.timeRef);
+                    EditText value = (EditText) timeView.findViewById(R.id.timeValue);
+                    name.setText(time.getName());
+                    ref.setText(time.getTime().toString());
+                    value.setHint(time.getValue().toString());
+                    value.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            if(Long.getLong(s.toString())!= null)
+                                time.setValue(Long.valueOf(s.toString()));
+                        }
+                    });
+                    timesContainer.addView(timeView);
+                }
+                container.addView(timesContainer);
             }
         }
     }
@@ -327,7 +486,7 @@ public class BindingAdapters {
     public static void setScales(LinearLayout container, Evaluation evaluation, Navigator navigator) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
         container.removeAllViews();
-        if(evaluation != null) {
+        if(evaluation != null && evaluation.getScales() != null) {
             for(Scale scale:evaluation.getScales()) {
                 LinearLayout subContainer = new LinearLayout(container.getContext());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -364,6 +523,36 @@ public class BindingAdapters {
                 container.addView(subContainer);
             }
         }
+
+
+        if (evaluation != null && evaluation.getTimes() != null && evaluation.getTimes().size()>0) {
+            LinearLayout timesContainer = new LinearLayout(container.getContext());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            timesContainer.setLayoutParams(params);
+            timesContainer.setOrientation(LinearLayout.VERTICAL);
+
+            TextView timesTitle = new TextView(container.getContext());
+            timesTitle.setText("TIEMPOS");
+            timesTitle.setTypeface(null, Typeface.BOLD);
+            timesTitle.setPadding(64, 0,0,0);
+            timesTitle.setTextColor(container.getResources().getColor(R.color.colorPrimaryDark));
+            timesTitle.setTextSize(16);
+            timesTitle.setLayoutParams(params);
+            timesContainer.addView(timesTitle);
+            for (Time time : evaluation.getTimes()) {
+
+                View timeView = inflater.inflate(R.layout.time_view, null);
+                TextView name = (TextView) timeView.findViewById(R.id.timeName);
+                TextView ref = (TextView) timeView.findViewById(R.id.timeRef);
+                EditText value = (EditText) timeView.findViewById(R.id.timeValue);
+                name.setText(time.getName());
+                ref.setText(time.getTime().toString());
+                value.setText(time.getValue().toString());
+                value.setEnabled(false);
+                timesContainer.addView(timeView);
+            }
+            container.addView(timesContainer);
+        }
     }
 
     @BindingAdapter({"addFeedback", "navigator"})
@@ -372,6 +561,18 @@ public class BindingAdapters {
         LayoutInflater inflater = LayoutInflater.from(context);
         container.removeAllViews();
         if(evaluation != null) {
+
+            LinearLayout.LayoutParams fParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            TextView feedbackTitle = new TextView(container.getContext());
+            feedbackTitle.setText("FEEDBACK");
+            feedbackTitle.setTypeface(null, Typeface.BOLD);
+            feedbackTitle.setPadding(64, 0,0,0);
+            feedbackTitle.setTextColor(container.getResources().getColor(R.color.colorPrimaryDark));
+            feedbackTitle.setTextSize(16);
+            feedbackTitle.setLayoutParams(fParams);
+            container.addView(feedbackTitle);
+
             for(FeedBack feedback:evaluation.getFeedBack()) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 MediaPlayer mediaPlayer = new MediaPlayer();
@@ -390,6 +591,7 @@ public class BindingAdapters {
                     e.printStackTrace();
                 }
                 mediaPlayer.setOnPreparedListener(mp -> {
+
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
                         //mPlayerControl.setImageResource(R.drawable.ic_play);
@@ -397,33 +599,34 @@ public class BindingAdapters {
                         //mediaPlayer.start();
                         //mPlayerControl.setImageResource(R.drawable.ic_pause);
                     }
-                });
-                Handler mHandler = new Handler();
+
+                    Handler mHandler = new Handler();
 //Make sure you update Seekbar on UI thread
-                ((Activity)context).runOnUiThread(new Runnable() {
+                    ((Activity)context).runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        if(mediaPlayer != null){
+                        @Override
+                        public void run() {
+                            if(mediaPlayer != null){
 
-                            long totalDuration = mediaPlayer.getDuration();
-                            long currentDuration = mediaPlayer.getCurrentPosition();
+                                long totalDuration = mediaPlayer.getDuration();
+                                long currentDuration = mediaPlayer.getCurrentPosition();
 
-                            Double percentage = (double) 0;
+                                Double percentage = (double) 0;
 
-                            long currentSeconds = (int) (currentDuration / 1000);
-                            long totalSeconds = (int) (totalDuration / 1000);
+                                long currentSeconds = (int) (currentDuration / 1000);
+                                long totalSeconds = (int) (totalDuration / 1000);
 
-                            // calculating percentage
-                            percentage =(((double)currentSeconds)/totalSeconds)*100;
+                                // calculating percentage
+                                percentage =(((double)currentSeconds)/totalSeconds)*100;
 
-                            // Updating progress bar
-                            int progress = percentage.intValue();
-                            //Log.d("Progress", ""+progress);
-                            seekBar.setProgress(progress);
+                                // Updating progress bar
+                                int progress = percentage.intValue();
+                                //Log.d("Progress", ""+progress);
+                                seekBar.setProgress(progress);
+                            }
+                            mHandler.postDelayed(this, 100);
                         }
-                        mHandler.postDelayed(this, 100);
-                    }
+                    });
                 });
 
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -473,8 +676,20 @@ public class BindingAdapters {
         Context context = container.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         container.removeAllViews();
-        if(evaluation != null && evaluation.getFeedBack().size()>0) {
-            for(FeedBackResponse feedback:evaluation.getFeedBack()) {
+        if(evaluation != null && evaluation.getFeedBackResponse() != null && evaluation.getFeedBackResponse().size()>0) {
+
+
+            LinearLayout.LayoutParams fParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            TextView feedbackTitle = new TextView(container.getContext());
+            feedbackTitle.setText("FEEDBACK");
+            feedbackTitle.setTypeface(null, Typeface.BOLD);
+            feedbackTitle.setPadding(64, 0,0,0);
+            feedbackTitle.setTextColor(container.getResources().getColor(R.color.colorPrimaryDark));
+            feedbackTitle.setTextSize(16);
+            feedbackTitle.setLayoutParams(fParams);
+            container.addView(feedbackTitle);
+            for(FeedBackResponse feedback:evaluation.getFeedBackResponse()) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 MediaPlayer mediaPlayer = new MediaPlayer();
                 View playerView = inflater.inflate(R.layout.feedback_player_view, null);
@@ -486,6 +701,7 @@ public class BindingAdapters {
                 seekBar.setMax(100);
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
+                    Log.d("FEEDBACK_AUDIO_PLAYER", feedback.getAudioUrl());
                     mediaPlayer.setDataSource(feedback.getAudioUrl());
                     mediaPlayer.prepareAsync();
                 } catch (IOException e) {
@@ -499,33 +715,33 @@ public class BindingAdapters {
                         //mediaPlayer.start();
                         //mPlayerControl.setImageResource(R.drawable.ic_pause);
                     }
-                });
-                Handler mHandler = new Handler();
-                //Make sure you update Seekbar on UI thread
-                ((Activity)context).runOnUiThread(new Runnable() {
+                    Handler mHandler = new Handler();
+                    //Make sure you update Seekbar on UI thread
+                    ((Activity)context).runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        if(mediaPlayer != null){
+                        @Override
+                        public void run() {
+                            if(mediaPlayer != null){
 
-                            long totalDuration = mediaPlayer.getDuration();
-                            long currentDuration = mediaPlayer.getCurrentPosition();
+                                long totalDuration = mediaPlayer.getDuration();
+                                long currentDuration = mediaPlayer.getCurrentPosition();
 
-                            Double percentage = (double) 0;
+                                Double percentage = (double) 0;
 
-                            long currentSeconds = (int) (currentDuration / 1000);
-                            long totalSeconds = (int) (totalDuration / 1000);
+                                long currentSeconds = (int) (currentDuration / 1000);
+                                long totalSeconds = (int) (totalDuration / 1000);
 
-                            // calculating percentage
-                            percentage =(((double)currentSeconds)/totalSeconds)*100;
+                                // calculating percentage
+                                percentage =(((double)currentSeconds)/totalSeconds)*100;
 
-                            // Updating progress bar
-                            int progress = percentage.intValue();
-                            //Log.d("Progress", ""+progress);
-                            seekBar.setProgress(progress);
+                                // Updating progress bar
+                                int progress = percentage.intValue();
+                                //Log.d("Progress", ""+progress);
+                                seekBar.setProgress(progress);
+                            }
+                            mHandler.postDelayed(this, 100);
                         }
-                        mHandler.postDelayed(this, 100);
-                    }
+                    });
                 });
 
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -687,6 +903,14 @@ public class BindingAdapters {
         ViewAnimator.animate(view).fadeIn().startDelay(delay).duration(500).start();
     }
 
+    @BindingAdapter("midFade")
+    public static void setMidFade(View view, Boolean active) {
+        if(active)
+            ViewAnimator.animate(view).alpha(0.5f).duration(300).start();
+        else
+            ViewAnimator.animate(view).alpha(1f).duration(300).start();
+    }
+
     @BindingAdapter({"pullToRefresh","isLoading"})
     public static void setPullToRefresh(SwipeRefreshLayout swipe, Action0 listener, Boolean isLoading) {
         swipe.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary);
@@ -710,6 +934,7 @@ public class BindingAdapters {
 
     static class BottomNavigationViewHelper {
 
+        @SuppressLint("RestrictedApi")
         static void removeShiftMode(BottomNavigationView view) {
             BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
             try {

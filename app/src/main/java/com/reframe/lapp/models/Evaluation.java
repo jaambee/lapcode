@@ -13,20 +13,26 @@ public class Evaluation {
 
     @SerializedName("approved")
     private Boolean mApproved;
+    @SerializedName("id")
+    private String mId;
     @SerializedName("createdAt")
     private String mCreatedAt;
     @SerializedName("exercise")
     private String mExercise;
     @SerializedName("feedBack")
     private List<FeedBack> mFeedBack;
+    @SerializedName("times")
+    private List<Time> mTimes;
     @SerializedName("group")
     private String mGroup;
     @SerializedName("info")
     private String mInfo;
-    @SerializedName("level")
-    private String mLevel;
+    @SerializedName("levelName")
+    private String mLevelName;
+    @SerializedName("levelId")
+    private String mLevelId;
     @SerializedName("professor")
-    private String mProfessor;
+    private Professor mProfessor;
     @SerializedName("scales")
     private List<Scale> mScales;
     @SerializedName("thumbnail")
@@ -84,19 +90,27 @@ public class Evaluation {
         mInfo = info;
     }
 
-    public String getLevel() {
-        return mLevel;
+    public String getLevelName() {
+        return mLevelName;
     }
 
-    public void setLevel(String level) {
-        mLevel = level;
+    public void setLevelName(String levelName) {
+        mLevelName = levelName;
     }
 
-    public String getProfessor() {
+    public String getLevelId() {
+        return mLevelId;
+    }
+
+    public void setLevelId(String levelId) {
+        mLevelId = levelId;
+    }
+
+    public Professor getProfessor() {
         return mProfessor;
     }
 
-    public void setProfessor(String professor) {
+    public void setProfessor(Professor professor) {
         mProfessor = professor;
     }
 
@@ -124,12 +138,28 @@ public class Evaluation {
         mTime = time;
     }
 
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
+    }
+
     public String getVideo() {
         return mVideo;
     }
 
     public void setVideo(String video) {
         mVideo = video;
+    }
+
+    public List<Time> getTimes() {
+        return mTimes;
+    }
+
+    public void setTimes(List<Time> times) {
+        mTimes = times;
     }
 
 }

@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 
 import com.manaschaudhari.android_mvvm.ViewModel;
 import com.reframe.lapp.base.Navigator;
+import com.reframe.lapp.models.User;
+import com.reframe.lapp.network.LappService;
+import com.reframe.lapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +62,8 @@ public class TeacherViewModel implements ViewModel {
         this.goEvaluations = ()-> current.set(1);
         this.goProfile = ()-> current.set(2);
         this.goSettings = navigator::openSettings;
+
+        LappService.getMe().map(User::getPicture).subscribe(profileImage::set);
 
         this.rxScreens = Observable.from(screens).toList();
         this.changeImage = () -> navigator.selectImage().subscribe(imageUpload -> profileImage.set(imageUpload.getLocation()), Throwable::printStackTrace);

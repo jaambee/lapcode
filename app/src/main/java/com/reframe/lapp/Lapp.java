@@ -3,12 +3,14 @@ package com.reframe.lapp;
 import android.app.Application;
 import android.content.ContextWrapper;
 
+import com.liulishuo.filedownloader.FileDownloader;
 import com.manaschaudhari.android_mvvm.utils.BindingUtils;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.reframe.lapp.adapters.BindingAdapters;
 import com.reframe.lapp.network.notifications.AppFcmReceiverData;
 import com.reframe.lapp.network.notifications.AppFcmReceiverUIBackground;
 import com.reframe.lapp.network.notifications.RefreshTokenReceiver;
+
 
 import rx_activity_result.RxActivityResult;
 import rx_fcm.internal.RxFcm;
@@ -32,9 +34,6 @@ public class Lapp extends Application {
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
-
-        //For clear sessions - only dev
-        //Prefs.clear();
 
         // Initialize data binders
         BindingUtils.setDefaultBinder(BindingAdapters.defaultBinder);
